@@ -5,13 +5,61 @@
 <h1>Hello, from Alpaca!</h1>
 
 <p>
-Welcome to your new Alpaca Driver. Make sure to customize the settings in the main program.cs to your company.
+    Welcome to the really basic Alpaca Proxy. This is a minimal viable demo that makes a lot of assumunptions. A big one is that 
 </p>
 
 <p>
-Often you would put links to documentation and support here.
+    Often you would put links to documentation and support here.
 </p>
 
 <p>
-Thank you for developing a new Alpaca Driver. Please leave any feedback in the driver template git repository or in the User Group.
+    Currently proxied devices:
 </p>
+
+<div>
+    @foreach (var device in ASCOM.Alpaca.DeviceManager.SafetyMonitors)
+    {
+        if(device.Value as ASCOM.Alpaca.Clients.AlpacaSafetyMonitor != null){
+            var cc = (device.Value as ASCOM.Alpaca.Clients.AlpacaSafetyMonitor).ClientConfiguration;
+            <span>Proxies on Device ID @device.Key: @cc.IpAddress:@cc.PortNumber</span>
+        }
+
+    }
+</div>
+
+<p>
+    Devices that can be proxied:
+</p>
+
+<div>
+    @foreach (var device in Program.Devices)
+    {
+        //This is a hack to find if the endpoint has a filterwheel. Use a similar design to ConformU if this gets put into production.
+        if(device.AscomDevices(ASCOM.Common.DeviceTypes.FilterWheel).Any()){
+        <span>@device.IpAddress:@device.Port</span>
+        <button @onclick="@(e => AddToDeviceList(device))" style="min-width:12ch; vertical-align:middle;">Proxy</button>
+        }
+    }
+</div>
+
+
+@code{
+
+
+    void AddToDeviceList(ASCOM.Alpaca.Discovery.AlpacaDevice device)
+
+    {
+        if (!ASCOM.Alpaca.DeviceManager.SafetyMonitors.Any(s => (s.Value as ASCOM.Alpaca.Clients.AlpacaSafetyMonitor)?.ClientConfiguration.IpAddress == device.IpAddress.ToString())){
+
+            int i = 0;
+
+            for (i = 0; ASCOM.Alpaca.DeviceManager.SafetyMonitors.Any(s=>s.Key==i); i++)
+            {
+
+            }
+
+            //For the demo this works with 1 safetymonitor per endpoint. This is fixable if this goes into production.
+            ASCOM.Alpaca.DeviceManager.LoadSafetyMonitor(i, new ASCOM.Alpaca.Clients.AlpacaSafetyMonitor(ASCOM.Common.Alpaca.ServiceType.Http, device.IpAddress.ToString(), device.Port, device.AscomDevices(ASCOM.Common.DeviceTypes.FilterWheel).First().AlpacaDeviceNumber), $"Proxy of {device.IpAddress}:{device.Port}", ServerSettings.GetDeviceUniqueId("SafetyMonitor", i));
+        }
+    }
+}

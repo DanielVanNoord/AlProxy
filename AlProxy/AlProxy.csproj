@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="ASCOM.Alpaca.Razor" Version="0.4.1-rc.1" />
+    <PackageReference Include="ASCOM.Alpaca.Device" Version="2.0.8" />
+    <PackageReference Include="ASCOM.Alpaca.Components" Version="2.0.8" />
   </ItemGroup>
 
 </Project>

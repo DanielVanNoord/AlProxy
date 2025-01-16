@@ -1,4 +1,5 @@
 using ASCOM.Alpaca;
+using ASCOM.Alpaca.Discovery;
 using ASCOM.Common;
 using ASCOM.Common.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -30,6 +31,8 @@ namespace AlProxy
 
         internal static IHostApplicationLifetime Lifetime;
 
+        internal static List<AlpacaDevice> Devices = new();
+
 
         public static void Main(string[] args)
         {
@@ -39,6 +42,8 @@ namespace AlProxy
 
             //For Debug ConsoleLogger is very nice. For production TraceLogger is recommended.
             Logger = new ASCOM.Tools.ConsoleLogger();
+
+            Devices = AlpacaDiscovery.GetAlpacaDevicesAsync().Result;
 
 
             #region Startup and Logging
@@ -151,7 +156,7 @@ namespace AlProxy
             //Add a safety monitor with device id 0. You can load any number of the same device with different ids or load other devices with Load* functions. 
             //You may want to inject settings and logging here to the Driver Instance.
             //For each device you add you should add a setting page to the settings folder and an entry in the Shared NavMenu
-            ASCOM.Alpaca.DeviceManager.LoadSafetyMonitor(0, new Drivers.BasicMonitor(), "Really Basic Safety Monitor", ServerSettings.GetDeviceUniqueId("SafetyMonitor", 0));
+            
 
             #region Finish Building and Start server
 
