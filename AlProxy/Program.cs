@@ -15,7 +15,7 @@ namespace AlProxy
     {
         //ToDo
         //Fill this with your driver name
-        internal const string DriverID = "Alpaca.CustomDevice";
+        internal const string DriverID = "Alpaca.AlProxy";
 
         //Change this to a unique value
         //You should offer a way for the end user to customize this via the command line so it can be changed in the case of a collision.
@@ -23,9 +23,9 @@ namespace AlProxy
         internal const int DefaultPort = 1234;
 
         //Fill these out
-        internal const string Manufacturer = "Your name here";
-        internal const string ServerName = "A friendly name for the server";
-        internal const string ServerVersion = "1.0";
+        internal const string Manufacturer = "ASCOM";
+        internal const string ServerName = "A test proxy hub for Alpaca devices and drivers";
+        internal const string ServerVersion = "0.1";
 
         internal static ASCOM.Common.Interfaces.ILogger Logger;
 
